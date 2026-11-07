@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ToDo App</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <style>
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .todo-container {
+            max-width: 750px;
+            margin: 80px auto;
+            padding: 35px;
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+        }
+
+        .app-title {
+            font-size: 38px;
+            font-weight: 700;
+            color: #2d3748;
+        }
+
+        .app-subtitle {
+            color: #718096;
+            font-size: 15px;
+        }
+
+        .task-input {
+            border-radius: 12px;
+            padding: 14px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .task-input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+        }
+
+        .add-btn {
+            border-radius: 12px;
+            padding: 14px 25px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .add-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .task-card {
+            background: #f8faff;
+            border: 1px solid #edf0f7;
+            border-radius: 14px;
+            padding: 16px 20px;
+            margin-bottom: 12px;
+            transition: 0.3s;
+        }
+
+        .task-card:hover {
+            transform: translateY(-2px);
+            background: #f0f4ff;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .task-title {
+            color: #2d3748;
+            font-size: 17px;
+            font-weight: 500;
+            overflow-wrap: anywhere;
+        }
+
+        .completed {
+            text-decoration: line-through;
+            color: #a0aec0;
+        }
+
+        .task-icon {
+            color: #667eea;
+            font-size: 20px;
+            margin-right: 12px;
+        }
+
+        .section-heading {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .empty-message {
+            color: #a0aec0;
+            padding: 25px;
+            text-align: center;
+        }
+
+        @media (max-width: 576px) {
+            .todo-container {
+                margin: 25px 10px;
+                padding: 22px;
+            }
+
+            .app-title {
+                font-size: 30px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="todo-container">
+
+            <!-- Header -->
+            <div class="text-center mb-4">
+
+                <div style="font-size: 45px;">📝</div>
+
+                <h1 class="app-title">ToDo Application</h1>
+
+                <p class="app-subtitle">
+                    Organize your tasks. Stay productive.
+                </p>
+
+            </div>
+
+            <!-- Add Task Form -->
+            <form action="/" method="post" class="row g-3 mb-4">
+
+                <div class="col-md-9">
+
+                    <input type="text"
+                           name="titleString"
+                           placeholder="What needs to be done?"
+                           class="form-control form-control-lg task-input"
+                           required>
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <button type="submit"
+                            class="btn btn-primary btn-lg add-btn w-100">
+                        + Add Task
+                    </button>
+
+                </div>
+
+            </form>
+
+            <!-- Task List -->
+            <div>
+
+                <h5 class="section-heading mb-3">
+                    📌 Your Tasks
+                </h5>
+
+                <!-- Empty Message -->
+                <div th:if="${#lists.isEmpty(alltasks)}"
+                     class="empty-message">
+                    No tasks yet. Add your first task! ✨
+                </div>
+
+                <!-- Display Tasks -->
+                <th:block th:each="task : ${alltasks}">
+
+                    <div class="task-card d-flex justify-content-between align-items-center gap-2 flex-wrap">
+
+                        <div class="d-flex align-items-center">
+
+                            <span class="task-icon"
+                                  th:text="${task.completed} ? '✓' : '○'">
+                                ○
+                            </span>
+
+                            <span class="task-title"
+                                  th:classappend="${task.completed} ? 'completed' : ''"
+                                  th:text="${task.titleString}">
+                                Task Title
+                            </span>
+
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="d-flex gap-2">
+
+                            <a th:href="@{/toggle/{id}(id=${task.id})}"
+                               class="btn btn-outline-primary btn-sm">
+                                Toggle
+                            </a>
+
+                            <a th:href="@{/delete/{id}(id=${task.id})}"
+                               class="btn btn-outline-danger btn-sm"
+                               onclick="return confirm('Are you sure you want to delete this task?')">
+                                Delete
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </th:block>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+</html>
+```
